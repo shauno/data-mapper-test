@@ -43,7 +43,7 @@ class InvoiceDomainManager
         $this->entityManager->persist($invoice);
         $this->entityManager->flush();
 
-        dd($invoice);
+        return $invoice;
     }
 
     public function find($id)
@@ -63,7 +63,7 @@ class InvoiceDomainManager
         $payment->setAmount($amount);
         $payment->setCreatedAt(new \DateTime());
         $payment->setUpdatedAt(new \DateTime());
-        
+
         $payment->addToInvoice($invoice);
 
         $this->entityManager->persist($payment);
