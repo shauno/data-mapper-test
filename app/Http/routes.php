@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/create-invoice', '\Acme\Invoices\InvoiceController@create');
+
 Route::get('/invoice/{id}', '\Acme\Invoices\InvoiceController@view');
 
 Route::get('/invoice/{id}/pay', '\Acme\Invoices\InvoiceController@pay');
