@@ -4,7 +4,8 @@ namespace Acme\Invoices\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @Entity @Table(name="invoices")
+ * @Entity(repositoryClass="\Acme\Invoices\Dal\InvoiceRepository")
+ * @Table(name="invoices")
  **/
 class Invoice
 {
