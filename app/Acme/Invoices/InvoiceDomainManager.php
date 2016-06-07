@@ -3,10 +3,6 @@
 namespace Acme\Invoices;
 
 use Acme\Invoices\Dal\InvoiceMapper;
-use Acme\Invoices\Dal\InvoiceRepository;
-use Acme\Invoices\Entities\Invoice;
-use Acme\Invoices\Entities\InvoiceItem;
-use Acme\Invoices\Entities\InvoicePayment;
 use Doctrine\ORM\EntityManager;
 
 class InvoiceDomainManager
