@@ -4,22 +4,36 @@ namespace Acme\Invoices;
 
 use Acme\Invoices\Dal\InvoiceMapper;
 use Acme\Invoices\Dal\InvoiceRepository;
-use Doctrine\ORM\EntityManager;
+use Illuminate\Support\MessageBag;
+use Illuminate\Validation\Factory as Validator;
 
 class InvoiceDomainManager
 {
     protected $invoiceMapper;
     protected $invoiceRepository;
 
-    public function __construct(InvoiceMapper $invoiceMapper, InvoiceRepository $invoiceRepository)
+    protected $validator;
+    protected $errors;
+
+    public function __construct(InvoiceMapper $invoiceMapper, InvoiceRepository $invoiceRepository, Validator $validator)
     {
         $this->invoiceMapper = $invoiceMapper;
         $this->invoiceRepository = $invoiceRepository;
+        $this->validator = $validator;
     }
 
-    public function create()
+    protected function setErrors(MessageBag $messages)
     {
+        $this->errors = $messages;
+    }
 
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    public function create($firstName, $lastName)
+    {
         $faker = \Faker\Factory::create();
 
         $invoiceItems = [];
@@ -31,7 +45,20 @@ class InvoiceDomainManager
             ];
         }
 
-        $invoice = $this->invoiceMapper->create($faker->firstName, $faker->lastName, $invoiceItems);
+        $valid = $this->validator->make([
+            'first_name' => $firstName,
+            'last_name'  => $lastName,
+        ], [
+            'first_name' => ['required'],
+            'last_name'  => ['required'],
+        ]);
+
+        if($valid->fails()) {
+            $this->setErrors($valid->messages());
+            return false;
+        }
+
+        $invoice = $this->invoiceMapper->create($firstName, $lastName, $invoiceItems);
 
         return $invoice;
     }

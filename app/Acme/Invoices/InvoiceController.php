@@ -3,14 +3,17 @@
 namespace Acme\Invoices;
 
 use App\Http\Controllers\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
-    public function create(InvoiceDomainManager $invoiceDomainManager)
+    public function create(InvoiceDomainManager $invoiceDomainManager, Request $request)
     {
-        //TODO get input from request and pass into domain manager. Quick test will create data from faker lib directly
-        $invoice = $invoiceDomainManager->create();
+        $invoice = $invoiceDomainManager->create($request->get('first_name'), $request->get('last_name'));
+
+        if($invoice === false) { //oh noes, there was an issue
+            dd($invoiceDomainManager->getErrors()->toArray());
+        }
 
         dd($invoice);
     }
