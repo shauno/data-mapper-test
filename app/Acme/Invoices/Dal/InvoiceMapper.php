@@ -42,7 +42,7 @@ class InvoiceMapper {
         return $invoice;
     }
 
-    public function pay($invoice, $amount)
+    public function pay(Invoice $invoice, $amount)
     {
         $payment = new InvoicePayment();
         $payment->setAmount($amount);

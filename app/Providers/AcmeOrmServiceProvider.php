@@ -25,18 +25,24 @@ class AcmeOrmServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('\Doctrine\ORM\EntityManager', function($app) {
-            $config = Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../Acme/Invoices/Entities'], env('APP_DEBUG'));
+        $config = Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../Acme/Invoices/Entities'], env('APP_DEBUG'));
 
-            $conn = [
-                'driver'   => 'pdo_mysql',
-                'host'     => env('DB_HOST'),
-                'user'     => env('DB_USERNAME'),
-                'password' => env('DB_PASSWORD'),
-                'dbname'   => env('DB_DATABASE'),
-            ];
+        $conn = [
+            'driver'   => 'pdo_mysql',
+            'host'     => env('DB_HOST'),
+            'user'     => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'dbname'   => env('DB_DATABASE'),
+        ];
 
-            return EntityManager::create($conn, $config);
+        $entityManager = EntityManager::create($conn, $config);
+
+        $this->app->singleton('\Doctrine\ORM\EntityManager', function($app) use ($entityManager) {
+            return $entityManager;
+        });
+
+        $this->app->singleton('\Acme\Invoices\Dal\InvoiceRepository', function($app) use ($entityManager) {
+            return $entityManager->getRepository('\Acme\Invoices\Entities\Invoice');
         });
     }
 }

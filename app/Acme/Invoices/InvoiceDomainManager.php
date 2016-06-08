@@ -3,6 +3,7 @@
 namespace Acme\Invoices;
 
 use Acme\Invoices\Dal\InvoiceMapper;
+use Acme\Invoices\Dal\InvoiceRepository;
 use Doctrine\ORM\EntityManager;
 
 class InvoiceDomainManager
@@ -10,11 +11,10 @@ class InvoiceDomainManager
     protected $invoiceMapper;
     protected $invoiceRepository;
 
-    //@TODO figure out how to inject Repository directly, as we don't actually want the entityManager() here :/
-    public function __construct(InvoiceMapper $invoiceMapper, EntityManager $entityManager)
+    public function __construct(InvoiceMapper $invoiceMapper, InvoiceRepository $invoiceRepository)
     {
         $this->invoiceMapper = $invoiceMapper;
-        $this->invoiceRepository = $entityManager->getRepository('\Acme\Invoices\Entities\Invoice');
+        $this->invoiceRepository = $invoiceRepository;
     }
 
     public function create()
