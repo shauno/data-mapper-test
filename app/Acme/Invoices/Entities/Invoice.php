@@ -25,12 +25,12 @@ class Invoice
     protected $updated_at;
 
     /**
-     * @OneToMany(targetEntity="InvoiceItem", mappedBy="invoice", cascade={"persist"})
+     * @OneToMany(targetEntity="InvoiceItem", mappedBy="invoice")
      */
     protected $items;
 
     /**
-     * @OneToMany(targetEntity="InvoicePayment", mappedBy="invoice", cascade={"persist"})
+     * @OneToMany(targetEntity="InvoicePayment", mappedBy="invoice")
      */
     protected $payments;
 
